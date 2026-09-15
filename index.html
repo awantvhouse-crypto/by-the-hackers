@@ -1,801 +1,1213 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>SEARCHING BY HACKERS</title>
-
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            background: #050607;
-            color: #e8e8e8;
-            font-family: Arial, Helvetica, sans-serif;
-            overflow-x: hidden;
-        }
-
-        /* =========================
-           BACKGROUND
-        ========================= */
-
-        body::before {
-            content: "";
-            position: fixed;
-            inset: 0;
-
-            background:
-                radial-gradient(
-                    circle at 50% 20%,
-                    rgba(0, 255, 140, 0.08),
-                    transparent 35%
-                );
-
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        /* =========================
-           NAVBAR
-        ========================= */
-
-        nav {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-
-            height: 70px;
-
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-
-            padding: 0 7%;
-
-            background: rgba(5, 6, 7, 0.92);
-            backdrop-filter: blur(15px);
-
-            border-bottom: 1px solid #171a1c;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-
-            font-size: 18px;
-            font-weight: 800;
-            letter-spacing: 1px;
-        }
-
-        .brand-dot {
-            width: 12px;
-            height: 12px;
-
-            border-radius: 50%;
-
-            background: #00ff88;
-
-            box-shadow:
-                0 0 10px #00ff88,
-                0 0 25px rgba(0, 255, 136, 0.6);
-        }
-
-        nav ul {
-            list-style: none;
-
-            display: flex;
-            gap: 30px;
-        }
-
-        nav a {
-            color: #92999d;
-            text-decoration: none;
-
-            font-size: 14px;
-
-            transition: 0.25s;
-        }
-
-        nav a:hover {
-            color: #00ff88;
-        }
-
-        /* =========================
-           HERO
-        ========================= */
-
-        .hero {
-            min-height: calc(100vh - 70px);
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            padding: 80px 7%;
-        }
-
-        .hero-content {
-            width: 100%;
-            max-width: 1150px;
-
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-
-            gap: 70px;
-            align-items: center;
-        }
-
-        .hero-text h1 {
-            font-size: clamp(42px, 6vw, 78px);
-
-            line-height: 0.95;
-
-            letter-spacing: -3px;
-
-            margin-bottom: 25px;
-        }
-
-        .hero-text h1 span {
-            color: #00ff88;
-
-            text-shadow:
-                0 0 15px rgba(0, 255, 136, 0.35);
-        }
-
-        .hero-text p {
-            max-width: 560px;
-
-            color: #899196;
-
-            line-height: 1.8;
-
-            font-size: 16px;
-
-            margin-bottom: 35px;
-        }
-
-        /* =========================
-           SEARCH
-        ========================= */
-
-        .search-box {
-            display: flex;
-
-            max-width: 620px;
-
-            background: #101315;
-
-            border: 1px solid #252b2d;
-
-            border-radius: 12px;
-
-            padding: 7px;
-
-            transition: 0.3s;
-        }
-
-        .search-box:focus-within {
-            border-color: #00ff88;
-
-            box-shadow:
-                0 0 0 3px rgba(0, 255, 136, 0.08),
-                0 0 25px rgba(0, 255, 136, 0.08);
-        }
-
-        .search-box input {
-            flex: 1;
-
-            min-width: 0;
-
-            background: transparent;
-
-            border: none;
-            outline: none;
-
-            color: white;
-
-            padding: 15px;
-
-            font-size: 15px;
-        }
-
-        .search-box input::placeholder {
-            color: #5d666a;
-        }
-
-        .search-box button {
-            border: none;
-
-            background: #00ff88;
-
-            color: #00140b;
-
-            font-weight: 800;
-
-            padding: 0 25px;
-
-            border-radius: 8px;
-
-            cursor: pointer;
-
-            transition: 0.2s;
-        }
-
-        .search-box button:hover {
-            background: #52ffad;
-
-            transform: translateY(-1px);
-        }
-
-        /* =========================
-           HERO IMAGE
-        ========================= */
-
-        .image-wrapper {
-            position: relative;
-
-            border-radius: 18px;
-
-            overflow: hidden;
-
-            border: 1px solid #252a2c;
-
-            box-shadow:
-                0 20px 70px rgba(0, 0, 0, 0.7);
-        }
-
-        .image-wrapper::after {
-            content: "";
-
-            position: absolute;
-            inset: 0;
-
-            background:
-                linear-gradient(
-                    135deg,
-                    rgba(0, 255, 136, 0.12),
-                    transparent 45%,
-                    rgba(0, 0, 0, 0.35)
-                );
-
-            pointer-events: none;
-        }
-
-        .image-wrapper img {
-            display: block;
-
-            width: 100%;
-
-            height: 470px;
-
-            object-fit: cover;
-
-            filter: grayscale(15%) contrast(1.05);
-
-            transition: 0.5s;
-        }
-
-        .image-wrapper:hover img {
-            transform: scale(1.025);
-        }
-
-        /* =========================
-           STATUS
-        ========================= */
-
-        .status {
-            position: absolute;
-
-            left: 20px;
-            bottom: 20px;
-
-            z-index: 2;
-
-            display: flex;
-            align-items: center;
-            gap: 9px;
-
-            background: rgba(0, 0, 0, 0.75);
-
-            border: 1px solid #252b2d;
-
-            padding: 10px 14px;
-
-            border-radius: 30px;
-
-            font-size: 12px;
-
-            color: #a7b0b3;
-
-            backdrop-filter: blur(10px);
-        }
-
-        .online {
-            width: 8px;
-            height: 8px;
-
-            background: #00ff88;
-
-            border-radius: 50%;
-
-            box-shadow: 0 0 10px #00ff88;
-        }
-
-        /* =========================
-           SECTION
-        ========================= */
-
-        section {
-            padding: 90px 7%;
-        }
-
-        .section-title {
-            text-align: center;
-
-            margin-bottom: 50px;
-        }
-
-        .section-title h2 {
-            font-size: 38px;
-
-            margin-bottom: 12px;
-        }
-
-        .section-title p {
-            color: #737c80;
-        }
-
-        /* =========================
-           CARDS
-        ========================= */
-
-        .cards {
-            max-width: 1100px;
-
-            margin: auto;
-
-            display: grid;
-
-            grid-template-columns:
-                repeat(3, 1fr);
-
-            gap: 20px;
-        }
-
-        .card {
-            background: #0d1012;
-
-            border: 1px solid #1d2325;
-
-            border-radius: 14px;
-
-            padding: 30px;
-
-            transition: 0.3s;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-
-            border-color: rgba(0, 255, 136, 0.35);
-
-            box-shadow:
-                0 15px 40px rgba(0, 0, 0, 0.35);
-        }
-
-        .card-icon {
-            width: 45px;
-            height: 45px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            background: rgba(0, 255, 136, 0.08);
-
-            border: 1px solid rgba(0, 255, 136, 0.15);
-
-            border-radius: 10px;
-
-            color: #00ff88;
-
-            font-size: 20px;
-
-            margin-bottom: 20px;
-        }
-
-        .card h3 {
-            margin-bottom: 10px;
-
-            font-size: 18px;
-        }
-
-        .card p {
-            color: #727b7f;
-
-            line-height: 1.7;
-
-            font-size: 14px;
-        }
-
-        /* =========================
-           SEARCH RESULT
-        ========================= */
-
-        #results {
-            max-width: 1100px;
-
-            margin: 35px auto 0;
-
-            display: none;
-        }
-
-        .result-box {
-            background: #0d1012;
-
-            border: 1px solid #1d2325;
-
-            border-radius: 14px;
-
-            padding: 25px;
-        }
-
-        .result-box h3 {
-            color: #00ff88;
-
-            margin-bottom: 10px;
-        }
-
-        .result-box p {
-            color: #858e92;
-
-            line-height: 1.7;
-        }
-
-        /* =========================
-           FOOTER
-        ========================= */
-
-        footer {
-            padding: 35px 7%;
-
-            border-top: 1px solid #171b1d;
-
-            text-align: center;
-
-            color: #555e62;
-
-            font-size: 13px;
-        }
-
-        footer span {
-            color: #00ff88;
-        }
-
-        /* =========================
-           MOBILE
-        ========================= */
-
-        @media (max-width: 850px) {
-
-            nav {
-                padding: 0 20px;
-            }
-
-            nav ul {
-                display: none;
-            }
-
-            .hero {
-                padding: 55px 20px;
-            }
-
-            .hero-content {
-                grid-template-columns: 1fr;
-
-                gap: 45px;
-            }
-
-            .hero-text h1 {
-                letter-spacing: -2px;
-            }
-
-            .image-wrapper img {
-                height: 350px;
-            }
-
-            section {
-                padding: 70px 20px;
-            }
-
-            .cards {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        @media (max-width: 500px) {
-
-            .search-box {
-                flex-direction: column;
-
-                gap: 7px;
-            }
-
-            .search-box button {
-                height: 48px;
-            }
-
-            .image-wrapper img {
-                height: 280px;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SEARCHING BY HACKERS</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #0b0d10;
+    color: #fff;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* APP */
+.app {
+    display: flex;
+    height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 270px;
+    background: #111418;
+    border-right: 1px solid #252930;
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    transition: .3s;
+}
+
+.logo-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.logo {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #444;
+}
+
+.logo-title {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.online {
+    color: #4ade80;
+    font-size: 11px;
+    margin-top: 3px;
+}
+
+.new-chat {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #30343b;
+    border-radius: 12px;
+    background: #191c21;
+    color: white;
+    cursor: pointer;
+    margin-bottom: 18px;
+    font-size: 14px;
+}
+
+.new-chat:hover {
+    background: #22262d;
+}
+
+.side-title {
+    color: #777;
+    font-size: 12px;
+    margin: 10px 5px;
+}
+
+.history {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.history-item {
+    padding: 10px;
+    border-radius: 9px;
+    color: #ccc;
+    font-size: 13px;
+    cursor: pointer;
+    margin-bottom: 3px;
+}
+
+.history-item:hover {
+    background: #1c2026;
+}
+
+.side-bottom {
+    border-top: 1px solid #252930;
+    padding-top: 12px;
+}
+
+.side-btn {
+    width: 100%;
+    background: transparent;
+    color: #bbb;
+    border: 0;
+    padding: 10px;
+    text-align: left;
+    cursor: pointer;
+    border-radius: 8px;
+}
+
+.side-btn:hover {
+    background: #1c2026;
+}
+
+/* MAIN */
+.main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+/* HEADER */
+.header {
+    height: 65px;
+    border-bottom: 1px solid #252930;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 22px;
+    background: #0e1013;
+}
+
+.header-title {
+    font-weight: bold;
+}
+
+.model {
+    font-size: 12px;
+    color: #888;
+    margin-top: 3px;
+}
+
+.header-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.icon-btn {
+    width: 38px;
+    height: 38px;
+    border: 1px solid #30343b;
+    background: #171a1f;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.icon-btn:hover {
+    background: #252a31;
+}
+
+/* CHAT */
+.chat {
+    flex: 1;
+    overflow-y: auto;
+    padding: 35px 8%;
+}
+
+.welcome {
+    max-width: 700px;
+    margin: 70px auto;
+    text-align: center;
+}
+
+.welcome-logo {
+    width: 85px;
+    height: 85px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 20px;
+    border: 2px solid #444;
+}
+
+.welcome h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+.welcome p {
+    color: #888;
+    margin-bottom: 30px;
+}
+
+.suggestions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.suggestion {
+    background: #15181d;
+    border: 1px solid #2a2e35;
+    color: #ddd;
+    padding: 15px;
+    border-radius: 12px;
+    cursor: pointer;
+    text-align: left;
+}
+
+.suggestion:hover {
+    background: #20242a;
+}
+
+/* MESSAGES */
+.message {
+    display: flex;
+    gap: 12px;
+    margin: 20px auto;
+    max-width: 850px;
+    animation: appear .25s ease;
+}
+
+@keyframes appear {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.avatar {
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #252930;
+    overflow: hidden;
+    font-size: 17px;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.message-content {
+    max-width: 75%;
+}
+
+.name {
+    font-size: 12px;
+    color: #888;
+    margin-bottom: 5px;
+}
+
+.bubble {
+    background: #191c21;
+    border: 1px solid #282c33;
+    border-radius: 15px;
+    padding: 12px 15px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+.user .bubble {
+    background: #24282f;
+}
+
+.actions {
+    display: flex;
+    gap: 5px;
+    margin-top: 6px;
+}
+
+.action {
+    border: 0;
+    background: transparent;
+    color: #777;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 4px 6px;
+}
+
+.action:hover {
+    color: white;
+}
+
+/* THINKING */
+.thinking {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    padding: 13px 16px;
+}
+
+.dot {
+    width: 7px;
+    height: 7px;
+    background: #aaa;
+    border-radius: 50%;
+    animation: blink 1.2s infinite;
+}
+
+.dot:nth-child(2) {
+    animation-delay: .2s;
+}
+
+.dot:nth-child(3) {
+    animation-delay: .4s;
+}
+
+@keyframes blink {
+    0%, 80%, 100% {
+        opacity: .2;
+    }
+    40% {
+        opacity: 1;
+    }
+}
+
+/* INPUT */
+.input-area {
+    padding: 15px 8% 20px;
+    background: #0b0d10;
+}
+
+.input-box {
+    max-width: 850px;
+    margin: auto;
+    border: 1px solid #30343b;
+    background: #15181d;
+    border-radius: 17px;
+    padding: 10px;
+}
+
+.input-row {
+    display: flex;
+    align-items: end;
+    gap: 8px;
+}
+
+textarea {
+    flex: 1;
+    background: transparent;
+    border: 0;
+    outline: none;
+    color: white;
+    resize: none;
+    min-height: 45px;
+    max-height: 150px;
+    padding: 10px;
+    font-size: 15px;
+}
+
+.input-btn {
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: #aaa;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.input-btn:hover {
+    background: #252930;
+    color: white;
+}
+
+.send {
+    background: white;
+    color: black;
+}
+
+.send:hover {
+    background: #ddd;
+}
+
+.footer {
+    text-align: center;
+    color: #555;
+    font-size: 11px;
+    margin-top: 8px;
+}
+
+/* LIGHT MODE */
+.light {
+    background: #f5f5f5;
+    color: #111;
+}
+
+.light .sidebar,
+.light .header,
+.light .input-area {
+    background: #fff;
+}
+
+.light .header,
+.light .sidebar {
+    border-color: #ddd;
+}
+
+.light .bubble,
+.light .input-box,
+.light .suggestion,
+.light .new-chat,
+.light .icon-btn {
+    background: #fff;
+    color: #111;
+    border-color: #ddd;
+}
+
+.light textarea {
+    color: #111;
+}
+
+/* MOBILE */
+@media(max-width: 700px) {
+
+    .sidebar {
+        position: fixed;
+        left: -280px;
+        top: 0;
+        bottom: 0;
+        z-index: 10;
+    }
+
+    .sidebar.open {
+        left: 0;
+    }
+
+    .chat {
+        padding: 25px 15px;
+    }
+
+    .input-area {
+        padding: 10px;
+    }
+
+    .suggestions {
+        grid-template-columns: 1fr;
+    }
+
+    .welcome {
+        margin: 40px auto;
+    }
+
+    .welcome h1 {
+        font-size: 24px;
+    }
+}
+</style>
 </head>
-
 
 <body>
 
-    <!-- =========================
-         NAVBAR
-    ========================== -->
+<div class="app">
 
-    <nav>
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
 
-        <div class="brand">
-            <div class="brand-dot"></div>
-            SEARCHING BY HACKERS
+        <div class="logo-area">
+
+            <!-- APNI IMAGE KA NAAM YAHAN CHANGE KAR SAKTE HO -->
+            <img src="logo.png" class="logo">
+
+            <div>
+                <div class="logo-title">
+                    SEARCHING BY HACKERS
+                </div>
+
+                <div class="online">
+                    ● Online
+                </div>
+            </div>
+
         </div>
 
-        <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#search">Search</a></li>
-            <li><a href="#features">Features</a></li>
-        </ul>
+        <button class="new-chat" onclick="newChat()">
+            ＋ New Chat
+        </button>
 
-    </nav>
+        <div class="side-title">
+            RECENT CHATS
+        </div>
 
+        <div class="history" id="history"></div>
 
-    <!-- =========================
-         HERO
-    ========================== -->
+        <div class="side-bottom">
 
-    <main id="home">
+            <button class="side-btn" onclick="toggleTheme()">
+                🌙 Theme
+            </button>
 
-        <section class="hero">
+            <button class="side-btn" onclick="clearChats()">
+                🗑 Clear Chats
+            </button>
 
-            <div class="hero-content">
+        </div>
 
-                <div class="hero-text">
-
-                    <h1>
-                        SEARCHING
-                        <br>
-                        <span>BY HACKERS</span>
-                    </h1>
-
-                    <p>
-                        A dark, modern search interface built for
-                        researchers, developers and cybersecurity
-                        enthusiasts.
-                    </p>
+    </aside>
 
 
-                    <div class="search-box">
+    <!-- MAIN -->
+    <main class="main">
 
-                        <input
-                            id="searchInput"
-                            type="text"
-                            placeholder="Search something..."
-                            autocomplete="off"
-                        >
+        <!-- HEADER -->
+        <header class="header">
 
-                        <button onclick="performSearch()">
-                            SEARCH
-                        </button>
+            <div>
 
-                    </div>
-
-                    <div id="results">
-
-                        <div class="result-box">
-
-                            <h3>Search initiated</h3>
-
-                            <p id="resultText">
-                                Searching...
-                            </p>
-
-                        </div>
-
-                    </div>
-
+                <div class="header-title">
+                    SEARCHING BY HACKERS
                 </div>
 
-
-                <!-- USER IMAGE / LOGO -->
-
-                <div class="image-wrapper">
-
-                    <!--
-                        IMPORTANT:
-                        Apni uploaded image ko
-                        GitHub repo mein logo.png
-                        naam se rakho.
-                    -->
-
-                    <img
-                        src="logo.png"
-                        alt="Searching By Hackers"
-                    >
-
-                    <div class="status">
-
-                        <span class="online"></span>
-
-                        SYSTEM ONLINE
-
-                    </div>
-
+                <div class="model">
+                    AI Assistant
                 </div>
 
             </div>
 
-        </section>
+            <div class="header-actions">
+
+                <button class="icon-btn" onclick="toggleSidebar()">
+                    ☰
+                </button>
+
+                <button class="icon-btn" onclick="toggleTheme()">
+                    ◐
+                </button>
+
+            </div>
+
+        </header>
 
 
-        <!-- =========================
-             FEATURES
-        ========================== -->
+        <!-- CHAT -->
+        <section class="chat" id="chat">
 
-        <section id="features">
+            <div class="welcome" id="welcome">
 
-            <div class="section-title">
+                <img src="logo.png" class="welcome-logo">
 
-                <h2>Built For Searching</h2>
+                <h1>
+                    SEARCHING BY HACKERS
+                </h1>
 
                 <p>
-                    Simple interface. Powerful possibilities.
+                    Your smart AI assistant.
                 </p>
 
-            </div>
+                <div class="suggestions">
 
-
-            <div class="cards">
-
-                <div class="card">
-
-                    <div class="card-icon">
-                        ⌕
+                    <div class="suggestion"
+                         onclick="useSuggestion('Explain Python to me like I am a beginner')">
+                        💻 Explain Python
                     </div>
 
-                    <h3>Smart Search</h3>
-
-                    <p>
-                        Search interface designed for fast
-                        discovery and research.
-                    </p>
-
-                </div>
-
-
-                <div class="card">
-
-                    <div class="card-icon">
-                        &lt;/&gt;
+                    <div class="suggestion"
+                         onclick="useSuggestion('Help me build a website')">
+                        🌐 Build a Website
                     </div>
 
-                    <h3>Developer Friendly</h3>
-
-                    <p>
-                        Clean HTML, CSS and JavaScript structure
-                        that is easy to customize.
-                    </p>
-
-                </div>
-
-
-                <div class="card">
-
-                    <div class="card-icon">
-                        ◉
+                    <div class="suggestion"
+                         onclick="useSuggestion('Give me 5 interesting coding project ideas')">
+                        🚀 Project Ideas
                     </div>
 
-                    <h3>Modern Interface</h3>
-
-                    <p>
-                        Responsive dark interface with a
-                        cybersecurity-inspired visual style.
-                    </p>
+                    <div class="suggestion"
+                         onclick="useSuggestion('Teach me something interesting')">
+                        🧠 Teach Me
+                    </div>
 
                 </div>
 
             </div>
 
         </section>
+
+
+        <!-- INPUT -->
+        <div class="input-area">
+
+            <div class="input-box">
+
+                <div class="input-row">
+
+                    <button class="input-btn"
+                            onclick="document.getElementById('file').click()">
+                        📎
+                    </button>
+
+                    <input type="file"
+                           id="file"
+                           hidden
+                           onchange="fileSelected(this)">
+
+                    <textarea
+                        id="input"
+                        placeholder="Message SEARCHING BY HACKERS..."
+                        onkeydown="handleKey(event)"
+                    ></textarea>
+
+                    <button class="input-btn"
+                            onclick="startVoice()">
+                        🎤
+                    </button>
+
+                    <button class="input-btn send"
+                            onclick="sendMessage()">
+                        ➤
+                    </button>
+
+                </div>
+
+            </div>
+
+            <div class="footer">
+                SEARCHING BY HACKERS can make mistakes. Check important information.
+            </div>
+
+        </div>
 
     </main>
 
-
-    <!-- =========================
-         FOOTER
-    ========================== -->
-
-    <footer>
-
-        © 2026
-        <span>SEARCHING BY HACKERS</span>
-        — Built for research and learning.
-
-    </footer>
+</div>
 
 
-    <!-- =========================
-         JAVASCRIPT
-    ========================== -->
+<script>
 
-    <script>
+/* ==============================
+   SETTINGS
+================================ */
 
-        const searchInput =
-            document.getElementById("searchInput");
+const API_URL = "/api/chat";
 
-        const results =
-            document.getElementById("results");
+let messages = [];
 
-        const resultText =
-            document.getElementById("resultText");
+let chatHistory =
+    JSON.parse(localStorage.getItem("searching_history") || "[]");
 
 
-        function performSearch() {
+/* ==============================
+   ELEMENTS
+================================ */
 
-            const query =
-                searchInput.value.trim();
-
-
-            if (!query) {
-
-                resultText.textContent =
-                    "Please enter something to search.";
-
-                results.style.display = "block";
-
-                return;
-            }
+const chat = document.getElementById("chat");
+const input = document.getElementById("input");
+const welcome = document.getElementById("welcome");
+const history = document.getElementById("history");
+const sidebar = document.getElementById("sidebar");
 
 
-            results.style.display = "block";
+/* ==============================
+   START
+================================ */
+
+renderHistory();
 
 
-            resultText.textContent =
-                "You searched for: " + query +
-                ". This demo search interface is ready to be connected to your own search/API backend.";
+/* ==============================
+   SEND MESSAGE
+================================ */
+
+async function sendMessage() {
+
+    const text = input.value.trim();
+
+    if (!text) return;
+
+    input.value = "";
+
+    if (welcome) {
+        welcome.style.display = "none";
+    }
+
+    addMessage("user", text);
+
+    messages.push({
+        role: "user",
+        content: text
+    });
+
+    addHistory(text);
+
+    const thinking = addThinking();
+
+    try {
+
+        /*
+        BACKEND SE YAHAN AI RESPONSE AYEGA
+        */
+
+        const response = await fetch(API_URL, {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                message: text,
+                messages: messages
+            })
+
+        });
+
+
+        if (!response.ok) {
+            throw new Error("API request failed");
         }
 
 
-        searchInput.addEventListener(
-            "keydown",
-            function(event) {
+        const data = await response.json();
 
-                if (event.key === "Enter") {
+        thinking.remove();
 
-                    performSearch();
 
-                }
+        const answer =
+            data.reply ||
+            data.output ||
+            "AI ne koi response nahi diya.";
 
-            }
+
+        messages.push({
+            role: "assistant",
+            content: answer
+        });
+
+
+        addMessage("assistant", answer);
+
+
+    } catch (error) {
+
+        thinking.remove();
+
+        addMessage(
+            "assistant",
+            "⚠️ AI backend connect nahi hai. `/api/chat` endpoint connect karo."
         );
 
-    </script>
+        console.error(error);
+
+    }
+
+}
+
+
+/* ==============================
+   ADD MESSAGE
+================================ */
+
+function addMessage(type, text) {
+
+    const message = document.createElement("div");
+
+    message.className =
+        "message " + type;
+
+
+    let avatarHTML;
+
+
+    if (type === "assistant") {
+
+        avatarHTML =
+            `<img src="logo.png">`;
+
+    } else {
+
+        avatarHTML = "👤";
+
+    }
+
+
+    message.innerHTML = `
+
+        <div class="avatar">
+            ${avatarHTML}
+        </div>
+
+        <div class="message-content">
+
+            <div class="name">
+                ${type === "assistant" ? "SEARCHING BY HACKERS" : "You"}
+            </div>
+
+            <div class="bubble">
+                ${formatText(text)}
+            </div>
+
+            ${
+                type === "assistant"
+                ?
+                `
+                <div class="actions">
+
+                    <button class="action"
+                        onclick="copyText(this)">
+                        📋 Copy
+                    </button>
+
+                    <button class="action"
+                        onclick="regenerate()">
+                        🔄 Regenerate
+                    </button>
+
+                    <button class="action">
+                        👍
+                    </button>
+
+                    <button class="action">
+                        👎
+                    </button>
+
+                </div>
+                `
+                : ""
+            }
+
+        </div>
+
+    `;
+
+
+    chat.appendChild(message);
+
+    chat.scrollTop = chat.scrollHeight;
+
+}
+
+
+/* ==============================
+   THINKING
+================================ */
+
+function addThinking() {
+
+    const message = document.createElement("div");
+
+    message.className = "message";
+
+
+    message.innerHTML = `
+
+        <div class="avatar">
+            <img src="logo.png">
+        </div>
+
+        <div class="message-content">
+
+            <div class="name">
+                SEARCHING BY HACKERS
+            </div>
+
+            <div class="bubble thinking">
+
+                <span class="dot"></span>
+                <span class="dot"></span>
+                <span class="dot"></span>
+
+            </div>
+
+        </div>
+
+    `;
+
+
+    chat.appendChild(message);
+
+    chat.scrollTop = chat.scrollHeight;
+
+    return message;
+
+}
+
+
+/* ==============================
+   FORMAT TEXT
+================================ */
+
+function formatText(text) {
+
+    return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+        .replace(/`([^`]+)`/g, "<code>$1</code>")
+        .replace(/\n/g, "<br>");
+
+}
+
+
+/* ==============================
+   COPY
+================================ */
+
+function copyText(button) {
+
+    const bubble =
+        button
+        .closest(".message-content")
+        .querySelector(".bubble");
+
+    navigator.clipboard.writeText(
+        bubble.innerText
+    );
+
+    button.innerText = "✓ Copied";
+
+    setTimeout(() => {
+        button.innerText = "📋 Copy";
+    }, 1500);
+
+}
+
+
+/* ==============================
+   REGENERATE
+================================ */
+
+async function regenerate() {
+
+    if (messages.length === 0) return;
+
+    const lastUser =
+        [...messages]
+        .reverse()
+        .find(x => x.role === "user");
+
+    if (!lastUser) return;
+
+    input.value = lastUser.content;
+
+    await sendMessage();
+
+}
+
+
+/* ==============================
+   NEW CHAT
+================================ */
+
+function newChat() {
+
+    messages = [];
+
+    chat.innerHTML = "";
+
+    chat.innerHTML = `
+
+        <div class="welcome" id="welcome">
+
+            <img src="logo.png" class="welcome-logo">
+
+            <h1>
+                SEARCHING BY HACKERS
+            </h1>
+
+            <p>
+                Your smart AI assistant.
+            </p>
+
+            <div class="suggestions">
+
+                <div class="suggestion"
+                    onclick="useSuggestion('Explain Python to me like I am a beginner')">
+                    💻 Explain Python
+                </div>
+
+                <div class="suggestion"
+                    onclick="useSuggestion('Help me build a website')">
+                    🌐 Build a Website
+                </div>
+
+                <div class="suggestion"
+                    onclick="useSuggestion('Give me 5 interesting coding project ideas')">
+                    🚀 Project Ideas
+                </div>
+
+                <div class="suggestion"
+                    onclick="useSuggestion('Teach me something interesting')">
+                    🧠 Teach Me
+                </div>
+
+            </div>
+
+        </div>
+    `;
+
+}
+
+
+/* ==============================
+   SUGGESTION
+================================ */
+
+function useSuggestion(text) {
+
+    input.value = text;
+
+    sendMessage();
+
+}
+
+
+/* ==============================
+   ENTER KEY
+================================ */
+
+function handleKey(event) {
+
+    if (
+        event.key === "Enter" &&
+        !event.shiftKey
+    ) {
+
+        event.preventDefault();
+
+        sendMessage();
+
+    }
+
+}
+
+
+/* ==============================
+   HISTORY
+================================ */
+
+function addHistory(text) {
+
+    chatHistory.unshift({
+        title: text.substring(0, 35)
+    });
+
+    chatHistory =
+        chatHistory.slice(0, 20);
+
+    localStorage.setItem(
+        "searching_history",
+        JSON.stringify(chatHistory)
+    );
+
+    renderHistory();
+
+}
+
+
+function renderHistory() {
+
+    history.innerHTML = "";
+
+    chatHistory.forEach(item => {
+
+        const div =
+            document.createElement("div");
+
+        div.className =
+            "history-item";
+
+        div.innerText =
+            "💬 " + item.title;
+
+        history.appendChild(div);
+
+    });
+
+}
+
+
+function clearChats() {
+
+    localStorage.removeItem(
+        "searching_history"
+    );
+
+    chatHistory = [];
+
+    renderHistory();
+
+}
+
+
+/* ==============================
+   THEME
+================================ */
+
+function toggleTheme() {
+
+    document.body.classList.toggle("light");
+
+}
+
+
+/* ==============================
+   SIDEBAR
+================================ */
+
+function toggleSidebar() {
+
+    sidebar.classList.toggle("open");
+
+}
+
+
+/* ==============================
+   VOICE
+================================ */
+
+function startVoice() {
+
+    const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+
+    if (!SpeechRecognition) {
+
+        alert(
+            "Voice recognition is not supported in this browser."
+        );
+
+        return;
+
+    }
+
+
+    const recognition =
+        new SpeechRecognition();
+
+    recognition.lang = "en-US";
+
+    recognition.start();
+
+
+    recognition.onresult =
+        function(event) {
+
+            input.value =
+                event.results[0][0].transcript;
+
+        };
+
+}
+
+
+/* ==============================
+   FILE
+================================ */
+
+function fileSelected(fileInput) {
+
+    const file =
+        fileInput.files[0];
+
+    if (!file) return;
+
+    input.value =
+        "Attached: " + file.name;
+
+}
+
+
+/* ==============================
+   AUTO TEXTAREA HEIGHT
+================================ */
+
+input.addEventListener(
+    "input",
+    function() {
+
+        this.style.height = "auto";
+
+        this.style.height =
+            Math.min(
+                this.scrollHeight,
+                150
+            ) + "px";
+
+    }
+);
+
+</script>
 
 </body>
-
 </html>
